@@ -2,12 +2,8 @@
   "name": "grunt-assets-hash",
   "description": "Rename assets files with hash for better caching and add to JSON file.",
   "version": "0.1.0",
-  "homepage": "",
-  "author": {
-    "name": "Ricardo Riogo",
-    "email": "ricardoriogo@gmail.com",
-    "url": "http://ricardoriogo.com"
-  },
+  "homepage": "https://github.com/ricardoriogo/grunt-assets-hash",
+  "author": "Ricardo Riogo <ricardoriogo@gmail.com> (http://ricardoriogo.com)",
   "repository": {
     "type": "git",
     "url": "git://github.com/ricardoriogo/grunt-assets-hash"
@@ -39,5 +35,9 @@
   },
   "keywords": [
     "gruntplugin"
-  ]
+  ],
+  "dependencies": {
+    "grunt": "^0.4.5"
+  },
+  "license": "MIT"
 }
