@@ -19,7 +19,7 @@ module.exports = function(grunt) {
     var options = this.options({
       encoding: 'utf8',
       algorithm: 'md5',
-      jsonfile: 'assets-hash.json',
+      jsonFile: 'assets-hash.json',
       suffix: false,
       length: 8,
       rename: false,
@@ -37,14 +37,14 @@ module.exports = function(grunt) {
           return false;
         }
 
-        var jsonfile = options.jsonfile || 'assets-hash.json';
-        if (! /\.json$/.test(jsonfile)) {
-          grunt.log.warn(jsonfile + ' needs to be a JSON file.');
+        var jsonFile = options.jsonfile || options.jsonFile;
+        if (! /\.json$/.test(jsonFile)) {
+          grunt.log.warn(jsonFile + ' needs to be a JSON file.');
           return false;
         }
 
-        if ( ! fs.existsSync(jsonfile)) {
-          grunt.file.write(jsonfile, '{}');
+        if ( ! fs.existsSync(jsonFile)) {
+          grunt.file.write(jsonFile, '{}');
         }
 
         var basename = path.basename,
@@ -70,7 +70,7 @@ module.exports = function(grunt) {
         grunt.log.writeln('  ' + file.grey + (' changed to ') + newName.green);
 
         // Open JSON file
-        var jsonref = grunt.file.readJSON(jsonfile);
+        var jsonref = grunt.file.readJSON(jsonFile);
         
         // Delete old version file
         if (options.clear && typeof(jsonref[file]) != 'undefined' && fs.existsSync(jsonref[file])){
@@ -83,8 +83,8 @@ module.exports = function(grunt) {
         var ref = (options.fullPath) ? [path.dirname(file).replace(options.removeFromPath, ''), basename(file)].join('/') : basename(file);
         jsonref[ref] = hashed;
 
-        grunt.file.write(jsonfile, JSON.stringify(jsonref, null, 2));
-        grunt.log.writeln('  ' + jsonfile.grey + (' updated hash: ') + fingerprint.green);
+        grunt.file.write(jsonFile, JSON.stringify(jsonref, null, 2));
+        grunt.log.writeln('  ' + jsonFile.grey + (' updated hash: ') + fingerprint.green);
       });
     });
   });

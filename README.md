@@ -28,7 +28,7 @@ assets_hash: {
   assets: {
     options: {
       algorithm: 'sha1',
-      jsonfile: 'assets/versions.json',
+      jsonFile: 'assets/versions.json',
       clear: true
     },
     src: 'public/assets/css/main.css'
@@ -80,7 +80,7 @@ Default: `8`
 
 The number of characters of the file hash to prefix the file name with.
 
-### jsonfile
+### jsonFile
 
 Type: `String`  
 Default: `assets-hash.json`
