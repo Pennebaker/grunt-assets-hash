@@ -71,18 +71,23 @@ module.exports = function(grunt) {
 
         // Open JSON file
         var jsonref = grunt.file.readJSON(jsonFile);
+
+        // Define the output method
+        var ref = (options.fullPath) ? [path.dirname(file).replace(options.removeFromPath, ''), basename(file)].join('/') : basename(file);
+        var hashed = (options.fullPath) ? [path.dirname(file).replace(options.removeFromPath, ''), newName].join('/') : newName;
         
         // Delete old version file
-        if (options.clear && typeof(jsonref[file]) != 'undefined' && fs.existsSync(jsonref[file])){
-          grunt.file.delete(options.fullPath ? jsonref[file] : path.dirname(file) + jsonref[file]);
-          grunt.log.writeln('  Deleted ' + file.grey + (' old version '));
+        if (options.clear && typeof(jsonref[ref]) != 'undefined'){
+          var fileToDelete = (options.fullPath ? options.removeFromPath + jsonref[ref] : path.dirname(file) + jsonref[ref]);
+          
+          if(fs.existsSync(fileToDelete)){
+            grunt.file.delete(fileToDelete);
+            grunt.log.writeln('  Deleted ' + file.grey + (' old version '));
+          }
         }
         
-        // Define the output method
-        var hashed = (options.fullPath) ? [path.dirname(file).replace(options.removeFromPath, ''), newName].join('/') : newName;
-        var ref = (options.fullPath) ? [path.dirname(file).replace(options.removeFromPath, ''), basename(file)].join('/') : basename(file);
-        jsonref[ref] = hashed;
-
+        // Add or update new hashed file to JSON
+        jsonref[ref] = hashed
         grunt.file.write(jsonFile, JSON.stringify(jsonref, null, 2));
         grunt.log.writeln('  ' + jsonFile.grey + (' updated hash: ') + fingerprint.green);
       });
