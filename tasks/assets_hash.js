@@ -8,9 +8,9 @@
 
 'use strict';
 
-var fs = require('fs')
-  , path = require('path')
-  , crypto = require('crypto');
+var fs = require('fs'),
+    path = require('path'),
+    crypto = require('crypto');
 
 module.exports = function(grunt) {
 
@@ -55,13 +55,19 @@ module.exports = function(grunt) {
             ext = path.extname(file),
             newName = options.suffix ? [basename(file, ext), fingerprint, ext.slice(1)].join('.') : [fingerprint, basename(file, ext), ext.slice(1)].join('.');
 
+        // Define the output method
+        var ref = (options.fullPath) ? [path.dirname(file).replace(options.removeFromPath, ''), basename(file)].join('/') : basename(file);
+        var hashed = (options.fullPath) ? [path.dirname(file).replace(options.removeFromPath, ''), newName].join('/') : newName;
+
+        // The new file
+        var resultPath = path.resolve(path.dirname(file), newName);
+        
         // Prevent rename hashed files
-        if(name.search(fingerprint) >= 0){
+        if(name.search(fingerprint) >= 0 || fs.existsSync(resultPath)){
           return false;
         }
 
         // Copy/rename file base on hash and format
-        var resultPath = path.resolve(path.dirname(file), newName);
         if (options.rename) {
           fs.renameSync(file, resultPath);
         } else {
@@ -71,10 +77,6 @@ module.exports = function(grunt) {
 
         // Open JSON file
         var jsonref = grunt.file.readJSON(jsonFile);
-
-        // Define the output method
-        var ref = (options.fullPath) ? [path.dirname(file).replace(options.removeFromPath, ''), basename(file)].join('/') : basename(file);
-        var hashed = (options.fullPath) ? [path.dirname(file).replace(options.removeFromPath, ''), newName].join('/') : newName;
         
         // Delete old version file
         if (options.clear && typeof(jsonref[ref]) != 'undefined'){
