@@ -20,6 +20,7 @@ module.exports = function(grunt) {
       encoding: 'utf8',
       algorithm: 'md5',
       jsonFile: 'assets-hash.json',
+      jsonOnly: false,
       suffix: false,
       length: 8,
       rename: false,
@@ -68,10 +69,12 @@ module.exports = function(grunt) {
         }
 
         // Copy/rename file base on hash and format
-        if (options.rename) {
-          fs.renameSync(file, resultPath);
-        } else {
-          grunt.file.copy(file, resultPath);
+        if (!options.jsonOnly) {
+          if (options.rename) {
+            fs.renameSync(file, resultPath);
+          } else {
+            grunt.file.copy(file, resultPath);
+          }
         }
         grunt.log.writeln('  ' + file.grey + (' changed to ') + newName.green);
 
