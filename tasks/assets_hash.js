@@ -87,8 +87,10 @@ function hashFile(grunt, options, file, originalNames, re, computed) {
   // Open JSON file
   var jsonref = grunt.file.readJSON(jsonFile);
 
+  var ext = path.extname(file);
+
   var matches = content.match(re);
-  if (matches) {
+  if (matches && ext !== '.map') {
     var replacementPerformed = false;
     grunt.log.writeln('  ' + file.grey + ' replacements:'.blue);
     matches.forEach(function(match) {
@@ -118,7 +120,6 @@ function hashFile(grunt, options, file, originalNames, re, computed) {
 
   var hash = crypto.createHash(options.algorithm).update(content, options.encoding).digest('hex');
   var fingerprint = hash.slice(0, options.length);
-  var ext = path.extname(file);
   var newName = [basename(file, ext), fingerprint, ext.slice(1)].join('.');
 
   // Define the output method
