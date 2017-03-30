@@ -119,23 +119,11 @@ function hashFile(grunt, options, file, originalNames, re, computed) {
   var hash = crypto.createHash(options.algorithm).update(content, options.encoding).digest('hex');
   var fingerprint = hash.slice(0, options.length);
   var ext = path.extname(file);
-  var newName = [
-    basename(file, ext),
-    fingerprint,
-    ext.slice(1)
-  ].join('.');
+  var newName = [basename(file, ext), fingerprint, ext.slice(1)].join('.');
 
   // Define the output method
-  var ref = (options.fullPath) ? [
-      path.dirname(file).replace(options.removeFromPath, ''),
-      basename(file)
-    ].join('/') :
-    basename(file);
-  var hashed = (options.fullPath) ? [
-      path.dirname(file).replace(options.removeFromPath, ''),
-      newName
-    ].join('/') :
-    newName;
+  var ref = (options.fullPath) ? [path.dirname(file).replace(options.removeFromPath, ''), basename(file)].join('/') : basename(file);
+  var hashed = (options.fullPath) ? [path.dirname(file).replace(options.removeFromPath, ''), newName].join('/') : newName;
 
   // The new file
   var resultPath = path.resolve(path.dirname(file), newName);
@@ -157,9 +145,7 @@ function hashFile(grunt, options, file, originalNames, re, computed) {
 
   // Delete old version file
   if (options.clear && typeof(jsonref[ref]) != 'undefined') {
-    var fileToDelete = (options.fullPath ?
-      options.removeFromPath + jsonref[ref] :
-      path.dirname(file) + jsonref[ref]);
+    var fileToDelete = (options.fullPath ? options.removeFromPath + jsonref[ref] : path.dirname(file) + jsonref[ref]);
 
     if (fs.existsSync(fileToDelete)) {
       grunt.file.delete(fileToDelete);
