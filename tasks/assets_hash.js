@@ -35,7 +35,7 @@ function replaceRefs(grunt, options, file, re) {
     var replacementPerformed = false;
     grunt.log.writeln('  ' + file.grey + ' replacements:'.blue);
     matches.forEach(function(match) {
-      var match_clean = match.replace(new RegExp('\.[a-f0-9]{' + options.length + '}\.', 'g'), '.');
+      var match_clean = match.replace(new RegExp('\\.[a-f0-9]{' + options.length + '}\\.', 'g'), '.');
       if (jsonref[match_clean] != 'undefined') {
         if (match != jsonref[match_clean]) {
           content = content.replace(new RegExp(match, 'g'), jsonref[match_clean]);
@@ -94,7 +94,7 @@ function hashFile(grunt, options, file, originalNames, re, computed) {
     var replacementPerformed = false;
     grunt.log.writeln('  ' + file.grey + ' replacements:'.blue);
     matches.forEach(function(match) {
-      var match_clean = match.replace(new RegExp('\.[a-f0-9]{' + options.length + '}\.', 'g'), '.');
+      var match_clean = match.replace(new RegExp('\\.[a-f0-9]{' + options.length + '}\\.', 'g'), '.');
       hashFile(grunt, options, originalNames[match_clean], originalNames, re, computed);
       jsonref = grunt.file.readJSON(jsonFile);
       if (jsonref[match_clean] != 'undefined') {
