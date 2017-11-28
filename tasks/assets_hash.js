@@ -184,20 +184,22 @@ module.exports = function(grunt) {
     var originalNames = []
     this.files.forEach(function(files) {
       files.src.forEach(function(file) {
-        var reFile = file.replace(options.removeFromPath, '').escaperegex();
-        if (path.extname(file) === '.map') {
-          reFile = file.split('/').pop().replace(options.removeFromPath, '').escaperegex();
-        }
+        if (file != options.jsonFile) {
+          var reFile = file.replace(options.removeFromPath, '').escaperegex();
+          if (path.extname(file) === '.map') {
+            reFile = file.split('/').pop().replace(options.removeFromPath, '').escaperegex();
+          }
 
-        var arr = reFile.split('.')
-        arr = arr.slice(0, arr.length - 1).concat("(?:[a-f0-9]{" + options.length + "}\.)?" + arr.slice(arr.length - 1)[0]);
-        var match_re = arr.join('.');
+          var arr = reFile.split('.')
+          arr = arr.slice(0, arr.length - 1).concat("(?:[a-f0-9]{" + options.length + "}\.)?" + arr.slice(arr.length - 1)[0]);
+          var match_re = arr.join('.');
 
-        regExFiles.push(match_re);
-        if (path.extname(file) === '.map') {
-          originalNames[file.split('/').pop()] = file;
-        } else {
-          originalNames[file.replace(options.removeFromPath, '')] = file;
+          regExFiles.push(match_re);
+          if (path.extname(file) === '.map') {
+            originalNames[file.split('/').pop()] = file;
+          } else {
+            originalNames[file.replace(options.removeFromPath, '')] = file;
+          }
         }
       });
     });
@@ -205,7 +207,9 @@ module.exports = function(grunt) {
     var computed = []
     this.files.forEach(function(files) {
       files.src.forEach(function(file) {
-        hashFile(grunt, options, file, originalNames, re, computed);
+        if (file != options.jsonFile) {
+          hashFile(grunt, options, file, originalNames, re, computed);
+        }
       });
     });
 
